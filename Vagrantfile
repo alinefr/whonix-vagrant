@@ -27,13 +27,17 @@ Vagrant.configure(2) do |config|
         ".vagrant/machines/gateway/virtualbox/private_key") + 
        ' nc %h %p'
     ws.vm.provider 'virtualbox' do |vb|
-      vb.gui = true
+      vb.gui = false
     end
+    ws.vm.boot_timeout = 60
 
     ws.vm.network "private_network", ip: "10.152.152.11", 
       virtualbox__intnet: "Whonix", adapter: 1
     ws.vm.network "forwarded_port", guest: 22, host: 2200,
       id: "ssh", disabled: true
+
+    ws.ssh.forward_x11 = true
+    ws.ssh.forward_env = ["DISPLAY"]
   end
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
